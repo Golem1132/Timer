@@ -5,4 +5,5 @@ interface TimerMethods {
     fun stop()
     fun pause()
     fun resume()
+    fun next()
 }
