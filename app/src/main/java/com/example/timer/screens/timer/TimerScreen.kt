@@ -1,30 +1,29 @@
-package com.example.timer.screens
+package com.example.timer.screens.timer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.timer.components.TimerButtonsRow
 import com.example.timer.components.TimerCircle
 import com.example.timer.components.TimerExerciseInfo
-import com.example.timer.internal.TimerState
+import com.example.timer.navigation.TimerRoutes
 import com.example.timer.service.TimerService
 import com.example.timer.topappbar.TimerTopAppBar
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun TimerScreen(timerServiceBinder: TimerService.MyBinder?) {
+fun TimerScreen(navController: NavController, timerServiceBinder: TimerService.MyBinder?) {
     val state = DrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     Scaffold(topBar = {
@@ -32,7 +31,7 @@ fun TimerScreen(timerServiceBinder: TimerService.MyBinder?) {
             navIcon = {
                 Image(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "",
+                    contentDescription = "Open/Close drawer",
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier.clickable {
                         scope.launch {
@@ -46,6 +45,13 @@ fun TimerScreen(timerServiceBinder: TimerService.MyBinder?) {
             },
             title = {
                 Text(text = "Training name")
+            },
+            actions = {
+                Icon(imageVector = Icons.Default.Add,
+                    contentDescription = "Add new training",
+                    modifier = Modifier.clickable {
+                        navController.navigate(TimerRoutes.TrainingComposer.route)
+                    })
             }
         )
     }) {

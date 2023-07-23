@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.CountDownTimer
 import android.os.IBinder
-import com.example.timer.data.Exercise
+import com.example.timer.model.Exercise
 import com.example.timer.internal.TimerState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -45,7 +45,7 @@ class TimerService : Service(), TimerMethods {
     override fun start() {
         currentState.tryEmit(TimerState.RUNNING)
         currentTime.value = currentExercise.value?.duration ?: 120_000L
-        currentExercise.tryEmit(Exercise(1, "XD", 120_000L))
+        currentExercise.tryEmit(Exercise(1, "XD", 120_000L,0))
         timer = object : CountDownTimer(currentTime.value ?: 0L, interval) {
             override fun onTick(p0: Long) {
                 this@TimerService.currentTime.value = p0

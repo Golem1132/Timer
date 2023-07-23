@@ -7,8 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModelProvider
-import com.example.timer.screens.TimerScreen
-import com.example.timer.screens.TimerViewModel
+import com.example.timer.navigation.TimerNavigation
+import com.example.timer.screens.timer.TimerViewModel
 import com.example.timer.service.TimerService
 import com.example.timer.ui.theme.TimerTheme
 
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val binder = viewModel.binder.collectAsState()
             TimerTheme {
-                TimerScreen(binder.value)
+                TimerNavigation(service = binder.value)
             }
         }
     }

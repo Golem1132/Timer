@@ -1,4 +1,4 @@
-package com.example.timer.screens
+package com.example.timer.screens.timer
 
 import android.content.ComponentName
 import android.content.ServiceConnection
