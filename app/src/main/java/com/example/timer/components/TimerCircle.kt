@@ -30,7 +30,7 @@ fun TimerCircle(service: TimerService.MyBinder?) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f)
+                    .aspectRatio(1f, true)
                     .clip(CircleShape)
                     .background(color = Color.White),
                 contentAlignment = Alignment.Center
