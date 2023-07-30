@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.timer.components.TimerButtonsRow
 import com.example.timer.components.TimerCircle
@@ -29,10 +30,9 @@ fun TimerScreen(navController: NavController, timerServiceBinder: TimerService.M
     Scaffold(topBar = {
         TimerTopAppBar(
             navIcon = {
-                Image(
+                Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Open/Close drawer",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier.clickable {
                         scope.launch {
                             when (state.currentValue) {
@@ -44,7 +44,10 @@ fun TimerScreen(navController: NavController, timerServiceBinder: TimerService.M
                 )
             },
             title = {
-                Text(text = "Training name")
+                Text(
+                    text = "Training name",
+                    textAlign = TextAlign.Center
+                )
             },
             actions = {
                 Icon(imageVector = Icons.Default.Add,

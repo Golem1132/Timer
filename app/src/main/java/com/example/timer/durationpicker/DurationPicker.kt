@@ -1,7 +1,9 @@
 package com.example.timer.durationpicker
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -20,6 +22,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.timer.R
@@ -53,7 +56,7 @@ fun DurationPicker(
                 navIcon = {
                     Icon(
                         modifier = Modifier.clickable {
-                          onCancel()
+                            onCancel()
                         },
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close edit window"
@@ -62,100 +65,114 @@ fun DurationPicker(
             )
         }) {
             Column(
-                modifier = Modifier.padding(it),
+                modifier = Modifier.padding(
+                    top = it.calculateTopPadding(),
+                    start = it.calculateStartPadding(LayoutDirection.Ltr),
+                    end = it.calculateEndPadding(LayoutDirection.Ltr),
+                    bottom = 10.dp
+                ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    value = titleState.value,
-                    onValueChange = {
-                        titleState.value =
-                            if (it.length > 50)
-                                it.substring(0..49)
-                            else
-                                it
-                    },
-                    label = {
-                        Text("Exercise name")
-                    },
-                    supportingText = {
-                        Text(text = "${titleState.value.length}/50")
-                    },
-                    maxLines = 1,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        errorContainerColor = Color.Transparent
-                    )
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 5.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    DurationPickerField(
+                    TextField(
                         modifier = Modifier
-                            .weight(1f)
-                            .onFocusChanged {
-                                if (!it.hasFocus) {
-                                    when (minutesState.value.length) {
-                                        0 -> minutesState.value = "00"
-                                        1 -> minutesState.value = "0" + minutesState.value
-                                    }
-                                } else {
-                                    if (minutesState.value == "00")
-                                        minutesState.value = ""
-                                }
-                            },
-                        value = minutesState.value,
+                            .fillMaxWidth(0.9f)
+                            .horizontalScroll(rememberScrollState()),
+                        value = titleState.value,
                         onValueChange = {
-                            minutesState.value = if (it.length > 1)
-                                it.substring(0..1)
-                            else it
+                            titleState.value =
+                                if (it.length > 50)
+                                    it.substring(0..49)
+                                else
+                                    it
                         },
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                focusRequester.moveFocus(FocusDirection.Right)
-                            }
-                        ),
-                        imeAction = ImeAction.Next
+                        label = {
+                            Text("Exercise name")
+                        },
+                        supportingText = {
+                            Text(text = "${titleState.value.length}/50")
+                        },
+                        maxLines = 1,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            errorContainerColor = Color.Transparent
+                        )
                     )
-                    Icon(
-                        modifier = Modifier.height(IntrinsicSize.Min),
-                        painter = painterResource(id = R.drawable.duration_divider),
-                        contentDescription = "Divider"
-                    )
-                    DurationPickerField(
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .onFocusChanged {
-                                if (!it.hasFocus) {
-                                    if (secondsState.value.isNotBlank() && secondsState.value.toLong() > 59)
-                                        secondsState.value = "59"
-                                    when (secondsState.value.length) {
-                                        0 -> secondsState.value = "00"
-                                        1 -> secondsState.value = "0" + secondsState.value
+                            .fillMaxWidth()
+                            .padding(horizontal = 5.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        DurationPickerField(
+                            modifier = Modifier
+                                .weight(1f)
+                                .onFocusChanged {
+                                    if (!it.hasFocus) {
+                                        when (minutesState.value.length) {
+                                            0 -> minutesState.value = "00"
+                                            1 -> minutesState.value = "0" + minutesState.value
+                                        }
+                                    } else {
+                                        if (minutesState.value == "00")
+                                            minutesState.value = ""
                                     }
-                                } else {
-                                    if (secondsState.value == "00")
-                                        secondsState.value = ""
-                                }
+                                },
+                            value = minutesState.value,
+                            onValueChange = {
+                                minutesState.value = if (it.length > 1)
+                                    it.substring(0..1)
+                                else it
                             },
-                        value = secondsState.value,
-                        onValueChange = {
-                            secondsState.value = if (it.length > 1)
-                                it.substring(0..1)
-                            else it
-                        },
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                keyboard?.hide()
-                                focusRequester.clearFocus(true)
-                            }
-                        ),
-                        imeAction = ImeAction.Done
-                    )
+                            keyboardActions = KeyboardActions(
+                                onNext = {
+                                    focusRequester.moveFocus(FocusDirection.Right)
+                                }
+                            ),
+                            imeAction = ImeAction.Next
+                        )
+                        Icon(
+                            modifier = Modifier.height(IntrinsicSize.Min),
+                            painter = painterResource(id = R.drawable.duration_divider),
+                            contentDescription = "Divider"
+                        )
+                        DurationPickerField(
+                            modifier = Modifier
+                                .weight(1f)
+                                .onFocusChanged {
+                                    if (!it.hasFocus) {
+                                        if (secondsState.value.isNotBlank() && secondsState.value.toLong() > 59)
+                                            secondsState.value = "59"
+                                        when (secondsState.value.length) {
+                                            0 -> secondsState.value = "00"
+                                            1 -> secondsState.value = "0" + secondsState.value
+                                        }
+                                    } else {
+                                        if (secondsState.value == "00")
+                                            secondsState.value = ""
+                                    }
+                                },
+                            value = secondsState.value,
+                            onValueChange = {
+                                secondsState.value = if (it.length > 1)
+                                    it.substring(0..1)
+                                else it
+                            },
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    keyboard?.hide()
+                                    focusRequester.clearFocus(true)
+                                }
+                            ),
+                            imeAction = ImeAction.Done
+                        )
+                    }
+
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -175,6 +192,9 @@ fun DurationPicker(
 
                         if (duration != 0L && titleState.value.isNotBlank())
                             onPositive(duration, titleState.value)
+                        else {
+                            TODO("Mark errors like empty title or time")
+                        }
                     }) {
                         Text(text = "Save")
                     }

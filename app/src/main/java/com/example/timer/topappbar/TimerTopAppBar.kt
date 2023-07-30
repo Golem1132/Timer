@@ -25,7 +25,12 @@ fun TimerTopAppBar(
             Box {
                 navIcon()
             }
-            Box {
+            Box(
+                modifier = Modifier.weight(1f)
+                .padding(horizontal = 10.dp),
+                contentAlignment = Alignment.Center,
+                propagateMinConstraints = true
+            ) {
                 title()
             }
             Box {
