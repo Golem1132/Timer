@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -79,7 +80,7 @@ fun DurationPicker(
                     top = it.calculateTopPadding(),
                     start = it.calculateStartPadding(LayoutDirection.Ltr),
                     end = it.calculateEndPadding(LayoutDirection.Ltr),
-                    bottom = 10.dp
+                    bottom = 0.dp
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -185,13 +186,16 @@ fun DurationPicker(
                             isError = errorArrayState.value[1]
                         )
                     }
+                    Switch(checked = true, onCheckedChange = {})
 
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Button(onClick = {
+                    Button(modifier = Modifier.fillMaxWidth(),
+                        shape = RectangleShape ,
+                        onClick = {
                         val realMinutes = if (minutesState.value.isBlank())
                             0L
                         else
