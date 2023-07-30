@@ -57,6 +57,9 @@ fun TrainingComposerScreen(navController: NavController? = null) {
                         onValueChange = {
                             trainingTitle.value = it
                         },
+                        label = {
+                                Text(text = "Training name")
+                        },
                         maxLines = 1,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,

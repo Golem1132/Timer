@@ -9,7 +9,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -48,6 +50,14 @@ fun DurationPicker(
     }
     val titleState = rememberSaveable {
         mutableStateOf(title ?: "")
+    }
+
+    /**
+     * title [0],
+     * duration [1]
+     */
+    val errorArrayState = remember {
+        mutableStateOf<Array<Boolean>>(arrayOf(false, false))
     }
     val focusRequester = LocalFocusManager.current
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -95,6 +105,7 @@ fun DurationPicker(
                         supportingText = {
                             Text(text = "${titleState.value.length}/50")
                         },
+                        isError = errorArrayState.value[0],
                         maxLines = 1,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
@@ -134,7 +145,8 @@ fun DurationPicker(
                                     focusRequester.moveFocus(FocusDirection.Right)
                                 }
                             ),
-                            imeAction = ImeAction.Next
+                            imeAction = ImeAction.Next,
+                            isError = errorArrayState.value[1]
                         )
                         Icon(
                             modifier = Modifier.height(IntrinsicSize.Min),
@@ -169,7 +181,8 @@ fun DurationPicker(
                                     focusRequester.clearFocus(true)
                                 }
                             ),
-                            imeAction = ImeAction.Done
+                            imeAction = ImeAction.Done,
+                            isError = errorArrayState.value[1]
                         )
                     }
 
@@ -193,7 +206,10 @@ fun DurationPicker(
                         if (duration != 0L && titleState.value.isNotBlank())
                             onPositive(duration, titleState.value)
                         else {
-                            TODO("Mark errors like empty title or time")
+                            errorArrayState.value = arrayOf(
+                                titleState.value.isBlank(),
+                                duration <= 0
+                            )
                         }
                     }) {
                         Text(text = "Save")
