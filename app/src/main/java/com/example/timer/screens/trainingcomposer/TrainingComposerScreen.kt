@@ -105,7 +105,8 @@ fun TrainingComposerScreen(navController: NavController? = null) {
                         Exercise(
                             name = title,
                             duration = duration,
-                            parentId = 0
+                            parentId = 0,
+                            isRest = false
                         )
                     )
                     showDialog.value = false

@@ -9,5 +9,6 @@ data class Exercise(
     val id: Int = 0,
     val name: String,
     val duration: Long,
+    val isRest: Boolean,
     val parentId: Int
 )

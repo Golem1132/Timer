@@ -45,7 +45,7 @@ class TimerService : Service(), TimerMethods {
     override fun start() {
         currentState.tryEmit(TimerState.RUNNING)
         currentTime.value = currentExercise.value?.duration ?: 120_000L
-        currentExercise.tryEmit(Exercise(1, "XD", 120_000L,0))
+        currentExercise.tryEmit(Exercise(1, "XD", 120_000L,false, 0))
         timer = object : CountDownTimer(currentTime.value ?: 0L, interval) {
             override fun onTick(p0: Long) {
                 this@TimerService.currentTime.value = p0

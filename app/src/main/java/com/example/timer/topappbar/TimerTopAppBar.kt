@@ -13,7 +13,9 @@ fun TimerTopAppBar(
     title: @Composable () -> Unit = {},
     actions: @Composable () -> Unit = {}
 ) {
-    Surface {
+    Surface(
+        shadowElevation = 2.dp
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
