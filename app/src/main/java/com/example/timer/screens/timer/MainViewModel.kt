@@ -3,12 +3,11 @@ package com.example.timer.screens.timer
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.IBinder
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.timer.service.TimerService
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class TimerViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
     private val _binder: MutableStateFlow<TimerService.MyBinder?> = MutableStateFlow(null)
     val binder = _binder
 

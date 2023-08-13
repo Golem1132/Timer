@@ -108,7 +108,11 @@ fun HomeScreen(navController: NavController) {
                 }
             }) {
             if (trainingsList.value.isEmpty()) {
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(it)
+                ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,

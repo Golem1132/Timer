@@ -8,15 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModelProvider
 import com.example.timer.navigation.TimerNavigation
-import com.example.timer.screens.timer.TimerViewModel
+import com.example.timer.screens.timer.MainViewModel
 import com.example.timer.service.TimerService
 import com.example.timer.ui.theme.TimerTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: TimerViewModel
+    private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[TimerViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
             val binder = viewModel.binder.collectAsState()
             TimerTheme {
