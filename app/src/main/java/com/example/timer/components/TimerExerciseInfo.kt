@@ -20,7 +20,6 @@ import com.example.timer.service.TimerService
 fun TimerExerciseInfo(service: TimerService.MyBinder?) {
     val currentExercise = service?.getCurrentExercise()?.collectAsState()
     Column(
-        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {

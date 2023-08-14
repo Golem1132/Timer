@@ -24,8 +24,7 @@ private const val buttonSize = 48
 fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
     val timerState = timerServiceBinder?.getCurrentState()?.collectAsState()
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier,
         horizontalArrangement = Arrangement.spacedBy(
             25.dp,
             Alignment.CenterHorizontally
@@ -46,6 +45,7 @@ fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                 )
             }
+
             else -> Box {}
         }
         Image(

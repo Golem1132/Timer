@@ -1,5 +1,6 @@
 package com.example.timer.screens.timer
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.timer.components.TimerButtonsRow
 import com.example.timer.components.TimerCircle
@@ -50,24 +52,48 @@ fun TimerScreen(navController: NavController, timerServiceBinder: TimerService.M
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TimerCircle(timerServiceBinder, configuration.screenWidthDp)
-                TimerExerciseInfo(timerServiceBinder)
-                Box(
+            if (configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                Column(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .padding(it),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TimerButtonsRow(timerServiceBinder)
+                    TimerCircle(timerServiceBinder, configuration.screenWidthDp)
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(vertical = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TimerExerciseInfo(timerServiceBinder)
+                        TimerButtonsRow(timerServiceBinder)
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TimerCircle(timerServiceBinder, configuration.screenHeightDp)
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(vertical = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TimerExerciseInfo(timerServiceBinder)
+                        TimerButtonsRow(timerServiceBinder)
+                    }
                 }
             }
         }
     }
-
 }
 
