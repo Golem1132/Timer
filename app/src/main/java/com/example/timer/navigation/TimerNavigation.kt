@@ -15,7 +15,7 @@ import com.example.timer.service.TimerService
 fun TimerNavigation(service: TimerService.MyBinder?) {
     val navController = rememberNavController()
     val mainViewModel = viewModel(modelClass = MainViewModel::class.java)
-    NavHost(navController = navController, startDestination = TimerRoutes.TimerScreen.route) {
+    NavHost(navController = navController, startDestination = TimerRoutes.TrainingComposer.route) {
         composable(route = TimerRoutes.TimerScreen.route) {
             TimerScreen(navController = navController, timerServiceBinder = service)
         }

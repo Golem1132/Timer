@@ -11,4 +11,16 @@ data class Exercise(
     val duration: Long,
     val isRest: Boolean,
     val parentId: Int
-)
+) {
+    companion object {
+        fun default(): Exercise {
+            return Exercise(
+                name = "",
+                duration = 0L,
+                isRest = false,
+                parentId = 0
+            )
+        }
+    }
+}
+

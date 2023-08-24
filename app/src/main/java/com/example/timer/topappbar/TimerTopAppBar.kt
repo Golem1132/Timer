@@ -11,10 +11,11 @@ import androidx.compose.ui.unit.dp
 fun TimerTopAppBar(
     navIcon: @Composable () -> Unit = {},
     title: @Composable () -> Unit = {},
-    actions: @Composable () -> Unit = {}
+    actions: @Composable () -> Unit = {},
+    allowShadow: Boolean = true
 ) {
     Surface(
-        shadowElevation = 2.dp
+        shadowElevation = if (allowShadow) 2.dp else 0.dp
     ) {
         Row(
             modifier = Modifier
