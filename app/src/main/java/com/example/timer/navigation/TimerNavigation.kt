@@ -6,16 +6,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.timer.screens.home.HomeScreen
-import com.example.timer.screens.trainingcomposer.TrainingComposerScreen
-import com.example.timer.screens.timer.TimerScreen
 import com.example.timer.screens.timer.MainViewModel
+import com.example.timer.screens.timer.TimerScreen
+import com.example.timer.screens.trainingcomposer.TrainingComposerScreen
 import com.example.timer.service.TimerService
 
 @Composable
 fun TimerNavigation(service: TimerService.MyBinder?) {
     val navController = rememberNavController()
     val mainViewModel = viewModel(modelClass = MainViewModel::class.java)
-    NavHost(navController = navController, startDestination = TimerRoutes.TrainingComposer.route) {
+    NavHost(navController = navController, startDestination = TimerRoutes.HomeScreen.route) {
         composable(route = TimerRoutes.TimerScreen.route) {
             TimerScreen(navController = navController, timerServiceBinder = service)
         }
