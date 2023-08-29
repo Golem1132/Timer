@@ -3,10 +3,8 @@ package com.example.timer.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.timer.R
@@ -38,9 +35,9 @@ fun ExerciseItem(item: Exercise) {
         Icon(
             modifier = Modifier.size(24.dp),
             painter = if (item.isRest)
-                painterResource(id = R.drawable.add_24px)
+                painterResource(id = R.drawable.rest_icon)
             else
-                painterResource(id = R.drawable.duration_divider),
+                painterResource(id = R.drawable.work_icon),
             contentDescription = "Training type: ${
                 if (item.isRest)
                     "Rest"
@@ -74,7 +71,7 @@ fun ExerciseItem(item: Exercise) {
 fun PrevExerciseItem() {
     ExerciseItem(
         item = Exercise(
-            name = "XDXDXDXDXDXDXDXDXDXDXDXDXDXDXDXDXDXDXDXD",
+            name = "",
             duration = 1000L,
             isRest = false,
             parentId = 0

@@ -21,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.timer.R
 import com.example.timer.components.ExerciseItem
 import com.example.timer.internal.TrainingComposerEvent
 import com.example.timer.navigation.TimerRoutes
@@ -44,7 +46,7 @@ fun TrainingScreen(navController: NavController, viewModel: TrainingComposerView
                     })
             },
             actions = {
-                Icon(imageVector = Icons.Default.ArrowBack,
+                Icon(painter = painterResource(id = R.drawable.save_icon),
                     contentDescription = "Go back",
                     modifier = Modifier.clickable {
 //                        SAVE MEEEE!!!

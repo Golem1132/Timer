@@ -14,10 +14,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.timer.R
 import com.example.timer.components.TrainingItem
 import com.example.timer.internal.TrainingComposerEvent
 import com.example.timer.topappbar.TimerTopAppBar
@@ -47,6 +45,7 @@ fun PickTypeScreen(viewModel: TrainingComposerViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TrainingItem(
+                    icon = R.drawable.work_icon,
                     title = "Work",
                     color = LightBlue
                 ) {
@@ -54,6 +53,7 @@ fun PickTypeScreen(viewModel: TrainingComposerViewModel) {
                     viewModel.sendUiEvent(TrainingComposerEvent.PickDurationScreen)
                 }
                 TrainingItem(
+                    icon = R.drawable.rest_icon,
                     title = "Rest",
                     color = LightRed
                 ) {
@@ -71,6 +71,7 @@ fun PickTypeScreen(viewModel: TrainingComposerViewModel) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TrainingItem(
+                    icon = R.drawable.work_icon,
                     title = "Work",
                     color = LightBlue
                 ) {
@@ -78,6 +79,7 @@ fun PickTypeScreen(viewModel: TrainingComposerViewModel) {
                     viewModel.sendUiEvent(TrainingComposerEvent.PickDurationScreen)
                 }
                 TrainingItem(
+                    icon = R.drawable.rest_icon,
                     title = "Rest",
                     color = LightRed
                 ) {

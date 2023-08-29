@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -84,22 +83,22 @@ fun HomeScreen(navController: NavController) {
                         ) {
                             DrawerItem(
                                 title = "Add training",
-                                icon = R.drawable.add_24px,
+                                icon = R.drawable.add_icon,
                                 isSelected = true
                             ) {
                                 navController.navigate(TimerRoutes.TrainingComposer.route)
 
                             }
-                            DrawerItem(title = "Choose training", icon = R.drawable.add_24px) {
+                            DrawerItem(title = "Choose training", icon = R.drawable.all_trainings_icon) {
                                 navController.navigate(TimerRoutes.HomeScreen.route)
                             }
-                            DrawerItem(title = "Journal", icon = R.drawable.add_24px) {
+                            DrawerItem(title = "Journal", icon = R.drawable.journal_icon) {
                                 navController.navigate(TimerRoutes.JournalScreen.route)
                             }
-                            DrawerItem(title = "Record track", icon = R.drawable.add_24px) {
+                            DrawerItem(title = "Record track", icon = R.drawable.register_training_icon) {
                                 navController.navigate(TimerRoutes.RecordTrackScreen.route)
                             }
-                            DrawerItem(title = "Settings", icon = R.drawable.add_24px) {
+                            DrawerItem(title = "Settings", icon = R.drawable.settings_icon) {
                                 navController.navigate(TimerRoutes.SettingsScreen.route)
                             }
                         }
@@ -122,8 +121,18 @@ fun HomeScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        TrainingItem()
-                        TrainingItem()
+                        TrainingItem(
+                            title = "Create training",
+                            icon = R.drawable.add_icon
+                        ) {
+                            navController.navigate(TimerRoutes.TrainingComposer.route)
+                        }
+                        TrainingItem(
+                            title = "Register workout",
+                            icon = R.drawable.register_training_icon
+                        ) {
+                            navController.navigate(TimerRoutes.RecordTrackScreen.route)
+                        }
                     }
                 }
             } else {
