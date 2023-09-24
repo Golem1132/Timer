@@ -6,5 +6,7 @@ sealed class TimerRoutes(val route: String) {
     object HomeScreen: TimerRoutes("HomeScreen")
     object JournalScreen: TimerRoutes("JournalScreen")
     object RecordTrackScreen: TimerRoutes("RecordTrackScreen")
+    object MapScreen: TimerRoutes("MapScreen")
+    object StopWatchScreen: TimerRoutes("StopWatchScreen")
     object SettingsScreen: TimerRoutes("SettingsScreen")
 }

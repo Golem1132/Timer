@@ -2,27 +2,33 @@ package com.example.timer.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.timer.R
 import com.example.timer.internal.TimerState
-import com.example.timer.service.TimerService
 
-private const val buttonSize = 48
+private const val BUTTON_SIZE = 48
 
 @Composable
-fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
-    val timerState = timerServiceBinder?.getCurrentState()?.collectAsState()
+fun TimerButtonsRow(
+    timerState: TimerState?,
+    onStop: () -> Unit,
+    onStart: () -> Unit,
+    onResume: () -> Unit,
+    onPause: () -> Unit,
+    onNext: () -> Unit
+) {
     Row(
         modifier = Modifier,
         horizontalArrangement = Arrangement.spacedBy(
@@ -31,14 +37,14 @@ fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        when (timerState?.value) {
+        when (timerState) {
             TimerState.PAUSED -> {
                 Image(
                     modifier = Modifier
-                        .size(buttonSize.dp)
+                        .size(BUTTON_SIZE.dp)
                         .clip(CircleShape)
                         .clickable {
-                            timerServiceBinder.stop()
+                            onStop()
                         },
                     painter = painterResource(id = R.drawable.stop_circle_24px),
                     contentDescription = "",
@@ -46,20 +52,23 @@ fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
                 )
             }
 
-            else -> Box {}
+            else -> Box(
+                modifier = Modifier
+                    .size(BUTTON_SIZE.dp)
+            ) {}
         }
         Image(
             modifier = Modifier
-                .size((buttonSize * 1.75).dp)
+                .size((BUTTON_SIZE * 1.75).dp)
                 .clip(CircleShape)
                 .clickable {
-                    when (timerState?.value) {
-                        TimerState.RUNNING -> timerServiceBinder.pause()
-                        TimerState.PAUSED -> timerServiceBinder.resume()
-                        else -> timerServiceBinder?.start()
+                    when (timerState) {
+                        TimerState.RUNNING -> onPause()
+                        TimerState.PAUSED -> onResume()
+                        else -> onStart()
                     }
                 },
-            painter = when (timerState?.value) {
+            painter = when (timerState) {
                 TimerState.RUNNING -> painterResource(id = R.drawable.pause_circle_24px)
                 else -> painterResource(id = R.drawable.play_circle_24px)
             },
@@ -68,10 +77,10 @@ fun TimerButtonsRow(timerServiceBinder: TimerService.MyBinder?) {
         )
         Image(
             modifier = Modifier
-                .size(buttonSize.dp)
+                .size(BUTTON_SIZE.dp)
                 .clip(CircleShape)
                 .clickable {
-                    timerServiceBinder?.next()
+                    onNext()
                 },
             painter = painterResource(id = R.drawable.skip_next_24px),
             contentDescription = "",
