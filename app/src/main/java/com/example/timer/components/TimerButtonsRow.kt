@@ -27,7 +27,8 @@ fun TimerButtonsRow(
     onStart: () -> Unit,
     onResume: () -> Unit,
     onPause: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    shouldShowNext: Boolean = true
 ) {
     Row(
         modifier = Modifier,
@@ -75,16 +76,22 @@ fun TimerButtonsRow(
             contentDescription = "",
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
-        Image(
-            modifier = Modifier
-                .size(BUTTON_SIZE.dp)
-                .clip(CircleShape)
-                .clickable {
-                    onNext()
-                },
-            painter = painterResource(id = R.drawable.skip_next_24px),
-            contentDescription = "",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
+        if (shouldShowNext)
+            Image(
+                modifier = Modifier
+                    .size(BUTTON_SIZE.dp)
+                    .clip(CircleShape)
+                    .clickable {
+                        onNext()
+                    },
+                painter = painterResource(id = R.drawable.skip_next_24px),
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+            )
+        else
+            Box(
+                modifier = Modifier
+                    .size(BUTTON_SIZE.dp)
+            ) {}
     }
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -44,6 +45,9 @@ import com.example.timer.components.TimerButtonsRow
 import com.example.timer.service.TimerService
 import com.example.timer.topappbar.TimerTopAppBar
 import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -58,7 +62,11 @@ fun MapScreen(navController: NavController) {
     val viewModel: RecordTrackViewModel = viewModel()
     val location = TimerService.currentLocation.collectAsState()
     val binder = viewModel.binder.collectAsState()
-    val timerState = binder.value?.getCurrentState()?.collectAsState()
+    val timerState = binder.value?.getStopWatchState()?.collectAsState()
+    val totalTime = binder.value?.getStopWatchTotalTime()?.collectAsState()
+    val distance = remember(location.value) {
+        mutableStateOf(location.value?.distanceTo(TimerService.prevLocation ?: location.value!!) ?: 0f)
+    }
     val followLocation = rememberSaveable {
         mutableStateOf(false)
     }
@@ -66,7 +74,7 @@ fun MapScreen(navController: NavController) {
         mutableStateOf<MapView?>(null)
     }
     var gpsLocationProvider: GpsMyLocationProvider? = null
-    var locationOverlay = remember {
+    val locationOverlay = remember {
         mutableStateOf<MyLocationNewOverlay?>(null)
     }
     val locationPermissionLauncher = rememberLauncherForActivityResult(
@@ -123,12 +131,40 @@ fun MapScreen(navController: NavController) {
         TimerTopAppBar(
             title = {
                 Text(
-                    text = "10:00:00",
+                    text = buildAnnotatedString {
+                        val seconds = (totalTime?.value ?: 0) / 1000
+                        val minutes = seconds / 60
+                        val hours = minutes / 60
+                        val realSeconds = with(seconds) {
+                            if (this > 59L)
+                                this - (minutes * 60L)
+                            else
+                                this
+                        }
+                        append(
+                            "${
+                                if (hours < 10L)
+                                    "0$hours"
+                                else
+                                    hours
+                            }:${
+                                if (minutes < 10L)
+                                    "0$minutes"
+                                else
+                                    minutes
+                            }:${
+                                if (realSeconds < 10L)
+                                    "0$realSeconds"
+                                else
+                                    realSeconds
+                            }"
+                        )
+                    },
                     textAlign = TextAlign.Center
                 )
             },
             actions = {
-                Text(text = "100km")
+                Text(text = "${distance.value} km")
             },
             navIcon = {
                 Icon(imageVector = Icons.Default.ArrowBack,
@@ -154,10 +190,24 @@ fun MapScreen(navController: NavController) {
                     .load(ctx, ctx.getSharedPreferences("MapPrefs", Context.MODE_PRIVATE))
                 Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
                 MapView(ctx).apply {
-                    minZoomLevel = 5.0
+                    minZoomLevel = viewModel.currentZoom
                     setMultiTouchControls(true)
                     zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
                     setTileSource(TileSourceFactory.MAPNIK)
+                    addMapListener(
+                        object : MapListener {
+                            override fun onScroll(event: ScrollEvent?): Boolean {
+                                followLocation.value = locationOverlay.value?.isFollowLocationEnabled == true
+                                return true
+                            }
+
+                            override fun onZoom(event: ZoomEvent?): Boolean {
+                                viewModel.currentZoom = event?.zoomLevel ?: 5.0
+                                return true
+                            }
+
+                        }
+                    )
                 }
             },
             update = {
@@ -191,7 +241,7 @@ fun MapScreen(navController: NavController) {
                         if (location.value != null) {
                             map.value?.controller?.animateTo(
                                 GeoPoint(location.value!!.latitude, location.value!!.longitude),
-                                15.0,
+                                viewModel.currentZoom,
                                 500
                             )
                         }
@@ -213,20 +263,21 @@ fun MapScreen(navController: NavController) {
                 TimerButtonsRow(
                     timerState = timerState?.value,
                     onNext = {
-                        binder.value?.nextExercise()
+                        binder.value?.saveRecordStopWatch()
                     },
                     onPause = {
-                        binder.value?.pauseExercise()
+                        binder.value?.pauseStopWatch()
                     },
                     onResume = {
-                        binder.value?.resumeExercise()
+                        binder.value?.startStopWatch()
                     },
                     onStart = {
-                        binder.value?.startExercise()
+                        binder.value?.startStopWatch()
                     },
                     onStop = {
-                        binder.value?.stopExercise()
-                    }
+                        binder.value?.resetStopWatch()
+                    },
+                    shouldShowNext = false
                 )
             }
         }

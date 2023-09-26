@@ -15,6 +15,7 @@ class RecordTrackViewModel : ViewModel() {
 
     private val _binder = MutableStateFlow<TimerService.MyBinder?>(null)
     val binder = _binder.asStateFlow()
+    var currentZoom = 5.0
 
     val connection = object : ServiceConnection {
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {

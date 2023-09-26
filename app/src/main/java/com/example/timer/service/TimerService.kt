@@ -51,6 +51,7 @@ class TimerService : Service(), TimerMethods, LocationListener {
 
     companion object {
         val currentLocation: MutableStateFlow<Location?> = MutableStateFlow(null)
+        var prevLocation: Location? = null
     }
 
 
@@ -237,6 +238,7 @@ class TimerService : Service(), TimerMethods, LocationListener {
 
 
     override fun onLocationChanged(p0: Location) {
+        prevLocation = currentLocation.value
         currentLocation.tryEmit(p0)
         println(p0)
     }
