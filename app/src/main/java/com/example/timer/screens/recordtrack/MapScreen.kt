@@ -60,13 +60,11 @@ fun MapScreen(navController: NavController) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val localContext = LocalContext.current
     val viewModel: RecordTrackViewModel = viewModel()
-    val location = TimerService.currentLocation.collectAsState()
+    val location = viewModel.location.collectAsState()
     val binder = viewModel.binder.collectAsState()
     val timerState = binder.value?.getStopWatchState()?.collectAsState()
     val totalTime = binder.value?.getStopWatchTotalTime()?.collectAsState()
-    val distance = remember(location.value) {
-        mutableStateOf(location.value?.distanceTo(TimerService.prevLocation ?: location.value!!) ?: 0f)
-    }
+    val distance = viewModel.distance.collectAsState()
     val followLocation = rememberSaveable {
         mutableStateOf(false)
     }
