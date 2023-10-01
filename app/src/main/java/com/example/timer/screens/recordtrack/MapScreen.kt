@@ -274,6 +274,7 @@ fun MapScreen(navController: NavController) {
                     },
                     onStop = {
                         binder.value?.resetStopWatch()
+                        viewModel.resetDistance()
                     },
                     shouldShowNext = false
                 )

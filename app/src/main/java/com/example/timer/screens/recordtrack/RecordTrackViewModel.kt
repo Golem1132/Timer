@@ -7,6 +7,7 @@ import android.os.IBinder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timer.internal.RecordTrackUiEvent
+import com.example.timer.internal.TimerState
 import com.example.timer.service.TimerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,8 @@ class RecordTrackViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             TimerService.currentLocation.collectLatest {
-                calculateDistance(it)
+                if (_binder.value?.getStopWatchState()?.value == TimerState.RUNNING)
+                    calculateDistance(it)
             }
         }
     }
@@ -61,6 +63,10 @@ class RecordTrackViewModel : ViewModel() {
 
     private fun calculateDistance(location: Location?) {
         _distance.value += location?.distanceTo(TimerService.prevLocation ?: location) ?: 0f
+    }
+
+    fun resetDistance() {
+        _distance.value = 0f
     }
 
 }
