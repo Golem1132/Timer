@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -38,9 +40,7 @@ fun StopWatchScreen(navController: NavController) {
     val localContext = LocalContext.current
     val currentTime = binder.value?.getStopWatchCurrentTime()?.collectAsState()
     val totalTime = binder.value?.getStopWatchTotalTime()?.collectAsState()
-
-
-
+    val timeTable = viewModel.timeTable.collectAsState()
 
     localContext.startForegroundService(Intent(localContext, TimerService::class.java))
     localContext.bindService(
@@ -115,7 +115,7 @@ fun StopWatchScreen(navController: NavController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(0.8f),
+                        .weight(0.2f),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -151,6 +151,44 @@ fun StopWatchScreen(navController: NavController) {
                         fontSize = 30.sp.nonScaled
                     )
                 }
+                LazyColumn(modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.6f)) {
+                    items(timeTable.value.reversed()) {
+                        Text(
+                            text = buildAnnotatedString {
+                                val seconds = it / 1000
+                                val minutes = seconds / 60
+                                val hours = minutes / 60
+                                val realSeconds = with(seconds) {
+                                    if (this > 59L)
+                                        this - (minutes * 60L)
+                                    else
+                                        this
+                                }
+                                append(
+                                    "${
+                                        if (hours < 10L)
+                                            "0$hours"
+                                        else
+                                            hours
+                                    }:${
+                                        if (minutes < 10L)
+                                            "0$minutes"
+                                        else
+                                            minutes
+                                    }:${
+                                        if (realSeconds < 10L)
+                                            "0$realSeconds"
+                                        else
+                                            realSeconds
+                                    }"
+                                )
+                            },
+                            fontSize = 30.sp.nonScaled
+                        )
+                    }
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -160,6 +198,7 @@ fun StopWatchScreen(navController: NavController) {
                     TimerButtonsRow(
                         timerState = timerState?.value,
                         onNext = {
+                            viewModel.addToList(currentTime?.value ?: 0L)
                             binder.value?.saveRecordStopWatch()
                         },
                         onPause = {
@@ -173,6 +212,7 @@ fun StopWatchScreen(navController: NavController) {
                         },
                         onStop = {
                             binder.value?.resetStopWatch()
+                            viewModel.resetList()
                         }
                     )
                 }
